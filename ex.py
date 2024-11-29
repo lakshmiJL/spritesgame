@@ -8,10 +8,8 @@ HEIGHT = 400
 score = 0
 game_over = False
 score_displayed = False
-first_point_scored = False
 
 bee = Actor("bee.png")
-bee.w = 10
 bee.pos = (100, 50)
 flower = Actor("flower.png")
 flower.pos = (100, 200)
@@ -23,15 +21,12 @@ def draw():
     
     if game_over:
         screen.fill("red")
-        screen.draw.text(f"Time's Up!, your final score is {score}",
+        screen.draw.text("Time's Up!, your final score is " + str(score),
                          midtop=(WIDTH / 2, 10),
                          fontsize=15,
                          color="yellow")
     elif score_displayed:
-        screen.blit("background.png", (0, 0))
-        bee.draw()
-        flower.draw()
-        screen.draw.text("Score: " + str(score), color="black", topleft=(50, 50))
+        screen.draw.text("Score: " + str(score), color="black", topleft=(10, 10))
 
 def place_flower():
     flower.x = randint(55, WIDTH - 55)
@@ -46,7 +41,7 @@ def show_score():
     score_displayed = True
 
 def update():
-    global score, game_over, score_displayed, first_point_scored
+    global score, game_over, score_displayed
     
     if not game_over:
         if keyboard.a:
@@ -60,11 +55,9 @@ def update():
 
         if bee.colliderect(flower):
             score += 1
-            if score == 1:
-                first_point_scored = True
             place_flower()
     
-    if first_point_scored and not score_displayed:
+    if score > 1 and not score_displayed:
         clock.schedule_unique(show_score, 5.0)
 
 clock.schedule(time_up, 60.0)
